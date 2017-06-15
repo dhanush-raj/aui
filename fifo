@@ -499,29 +499,31 @@ format_partitions(){
 }
 #}}}
 #INSTALL BASE SYSTEM {{{
-install_base_system(){
-  print_title "INSTALL BASE SYSTEM"
-  print_info "Using the pacstrap script we install the base system. The base-devel package group will be installed also."
-  rm ${MOUNTPOINT}${EFI_MOUNTPOINT}/vmlinuz-linux
-  pacstrap ${MOUNTPOINT} base base-devel parted btrfs-progs f2fs-tools ntp net-tools
-  [[ $? -ne 0 ]] && error_msg "Installing base system to ${MOUNTPOINT} failed. Check error messages above."
-  local PTABLE=`parted -l | grep "gpt"`
-  [[ -n $PTABLE ]] && pacstrap ${MOUNTPOINT} gptfdisk
-  WIRELESS_DEV=`ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d'`
-  if [[ -n $WIRELESS_DEV ]]; then
-    pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
-  else
-    WIRED_DEV=`ip link | grep "ens\|eno\|enp" | awk '{print $2}'| sed 's/://' | sed '1!d'`
-    if [[ -n $WIRED_DEV ]]; then
-      arch_chroot "systemctl enable dhcpcd@${WIRED_DEV}.service"
-    fi
-  fi
-  if is_package_installed "espeakup"; then
-    pacstrap ${MOUNTPOINT} alsa-utils espeakup brltty
-    arch_chroot "systemctl enable espeakup.service"
-  fi
-}
+#install_base_system(){
+#  print_title "INSTALL BASE SYSTEM"
+#  print_info "Using the pacstrap script we install the base system. The base-devel package group will be installed also."
+#  rm ${MOUNTPOINT}${EFI_MOUNTPOINT}/vmlinuz-linux
+#  pacstrap ${MOUNTPOINT} base base-devel parted btrfs-progs f2fs-tools ntp net-tools
+#  [[ $? -ne 0 ]] && error_msg "Installing base system to ${MOUNTPOINT} failed. Check error messages above."
+#  local PTABLE=`parted -l | grep "gpt"`
+#  [[ -n $PTABLE ]] && pacstrap ${MOUNTPOINT} gptfdisk
+#  WIRELESS_DEV=`ip link | grep wl | awk '{print $2}'| sed 's/://' | sed '1!d'`
+#  if [[ -n $WIRELESS_DEV ]]; then
+#    pacstrap ${MOUNTPOINT} iw wireless_tools wpa_actiond wpa_supplicant dialog
+#  else
+#    WIRED_DEV=`ip link | grep "ens\|eno\|enp" | awk '{print $2}'| sed 's/://' | sed '1!d'`
+#    if [[ -n $WIRED_DEV ]]; then
+#      arch_chroot "systemctl enable dhcpcd@${WIRED_DEV}.service"
+#    fi
+#  fi
+#  if is_package_installed "espeakup"; then
+#    pacstrap ${MOUNTPOINT} alsa-utils espeakup brltty
+#    arch_chroot "systemctl enable espeakup.service"
+#  fi
+#}
 #}}}
+ls
+
 #CONFIGURE KEYMAP {{{
 configure_keymap(){
   #ADD KEYMAP TO THE NEW SETUP
